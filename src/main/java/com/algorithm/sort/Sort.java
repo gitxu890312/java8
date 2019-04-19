@@ -1,6 +1,8 @@
 package com.algorithm.sort;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @Author: xuming
@@ -50,9 +52,64 @@ public class Sort {
         }
     }
     public static void main(String[] args) {
-        int[] arrs = new int[]{3,5,10,1,9,2,7,4};
-//        Sort.bubbleSort(arrs);
-        Sort.insertSort(arrs);
-        System.out.println(Arrays.toString(arrs));
+        Integer[] tmps = new Integer[]{13, 9, 7, 6, 4,3, 2};
+        System.out.println(nearIndexOf(14, Arrays.asList(tmps),false)==0);
+        System.out.println(nearIndexOf(1, Arrays.asList(tmps),false)==-1);
+
+
+        System.out.println(nearIndexOf(12, Arrays.asList(tmps),true)==0);
+        System.out.println(nearIndexOf(12, Arrays.asList(tmps),false)==1);
+
+        System.out.println(nearIndexOf(8, Arrays.asList(tmps),true)==1);
+        System.out.println(nearIndexOf(8, Arrays.asList(tmps),false)==2);
+
+        System.out.println(nearIndexOf(6, Arrays.asList(tmps),false)==3);
+        System.out.println(nearIndexOf(4, Arrays.asList(tmps),false)==4);
+    }
+
+    /**
+     * 就近查找；查找离目标值最近的索引
+     * @param target 查找目标
+     * @param arrs 查找的数组（倒序）
+     * @param rtnMaxValue 当没有命中时返回较大值对应的一个索引
+     * @return
+     * 例如：
+     * arrs[13, 9, 7, 6, 4, 2]
+     * idx  0   1, 2, 3, 4, 5
+     *  target=14;return 0;
+     *  target=1;return -1;
+     *  target=12;rtnHighMix=TRUE return 0;else return 1;
+     *  target=8;rtnHighMix=TRUE return 1;else return 2;
+     *
+     */
+    public static int nearIndexOf(int target, List<Integer> arrs,boolean rtnMaxValue) {
+        if (arrs.size() == 0 || target < arrs.get(arrs.size() - 1)) {
+            return -1;
+        }
+        if (target >= arrs.get(0)) {
+            return 0;
+        }
+        int low = 0;
+        int high = arrs.size() - 1;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            int midBarTime = arrs.get(mid);
+            if (target == midBarTime) {
+                return mid;
+            } else if (midBarTime < target) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        System.out.println("low" + low + ",value" + arrs.get(low));
+        System.out.println("target:" + target);
+        System.out.println("high" + high + ",value" + arrs.get(high));
+
+        if(rtnMaxValue){
+            return high;
+        }else{
+            return low;
+        }
     }
 }
